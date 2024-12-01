@@ -1,1 +1,78 @@
+# PERMISOS DE CUENTAS
+Artifact Registry Administrator
+Artifact Registry Writer
+Cloud Run Admin
+Compute Load Balancer Admin
+Owner
+
+
+
 # PASO 1
+mkdir cloudrun_app
+cd cloudrun_app
+
+
+
+# PASO 2
+nano main.py
+
+from flask import Flask
+import os
+app = Flask(__name__)
+@app.route('/cloudrun')
+def hello():
+ return 'Bienvenido a Cloud Run'
+if __name__ == '__main__':
+ # Obtener el puerto desde la variable de entorno PORT
+ port = int(os.environ.get('PORT', '8080'))
+ app.run(host='0.0.0.0', port=port)
+
+
+
+# PASO 3
+nano requirements.txt
+
+Flask==2.0.3 
+Werkzeug==2.0.3
+
+
+
+# PASO 4
+nano Dockerfile
+
+# Usar una imagen base de Python
+FROM python:3.9-slim
+# Establecer el directorio de trabajo
+WORKDIR /app
+# Copiar los archivos de la aplicación
+COPY . /app
+# Instalar las dependencias
+RUN pip install --no-cache-dir -r requirements.txt
+# Exponer el puerto
+EXPOSE 8080
+# Ejecutar la aplicación
+CMD ["python", "main.py"]
+
+
+
+# PASO 5
+gcloud components update
+gcloud auth configure-docker us-central1-docker.pkg.dev
+
+
+
+# PASO 6
+docker build -t us-central1-docker.pkg.dev/[PROJECT_ID]/cloudrun-repo/cloudrun-app:latest .
+
+
+
+# PASO 7
+docker push us-central1-docker.pkg.dev/[PROJECT_ID]/cloudrun-repo/cloudrun-app:latest
+
+
+
+# PASO 8
+gcloud run deploy cloudrun-service \
+ --image us-central1-docker.pkg.dev/[PROJECT_ID]/cloudrun-repo/cloudrun-app:latest \
+ --region us-central1 \
+ --allow-unauthenticated
