@@ -19,7 +19,7 @@ nano main.py
 from flask import Flask
 import os
 app = Flask(__name__)
-@app.route('/cloudrun')
+@app.route('/')
 def hello():
  return 'Bienvenido a Cloud Run'
 if __name__ == '__main__':
