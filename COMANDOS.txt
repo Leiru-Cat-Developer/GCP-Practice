@@ -55,6 +55,73 @@ CMD ["python", "main.py"]
 
 
 
+from flask import Flask, render_template_string
+import os
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    # Plantilla HTML dinámica
+    html = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Equipo 3 - Aplicación de Redes</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f9;
+                color: #333;
+                padding: 20px;
+                margin: 0;
+            }
+            h1 {
+                color: #4CAF50;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                background: #fff;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .footer {
+                margin-top: 20px;
+                font-size: 0.9em;
+                color: #777;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Equipo 3</h1>
+            <h2>Materia: Aplicación de Redes</h2>
+            <p><strong>¿Qué es Cloud Run?</strong></p>
+            <p>
+                Cloud Run es un servicio de Google Cloud que permite ejecutar aplicaciones en contenedores 
+                de forma completamente gestionada. Esto significa que no tienes que preocuparte por la 
+                infraestructura subyacente, ya que se adapta automáticamente al tráfico recibido. Es ideal 
+                para aplicaciones modernas, escalables y basadas en microservicios.
+            </p>
+            <p>
+                Esta página fue creada y desplegada como parte del aprendizaje de herramientas de Google Cloud.
+            </p>
+            <p class="footer">© 2024 Equipo 3. Todos los derechos reservados.</p>
+        </div>
+    </body>
+    </html>
+    """
+    return render_template_string(html)
+
+if __name__ == '__main__':
+    # Obtener el puerto desde la variable de entorno PORT
+    port = int(os.environ.get('PORT', '8080'))
+    app.run(host='0.0.0.0', port=port)
+
+
+
 # PASO 5
 gcloud components update
 gcloud auth configure-docker us-central1-docker.pkg.dev
